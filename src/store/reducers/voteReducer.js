@@ -6,19 +6,20 @@ const initialState = {
 
 
 const voteReducer = (state=initialState, action) => {
-    console.log(action.payload)
+    const id = action.payload
     switch(action.type){
         case UP_VOTE:
             return{
-            ...state, count: state.count[action.payload] + 1
+            ...state, count: state.count[id] + 1
             }
         case DOWN_VOTE:
             return{
-            ...state, count: state.count[action.payload] - 1
+            ...state, count: state.count[id] - 1
             }
         default:
             return state
     }
+
 }
 
 export default voteReducer;
