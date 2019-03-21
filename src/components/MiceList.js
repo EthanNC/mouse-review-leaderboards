@@ -1,47 +1,100 @@
 import React, { Component } from 'react'
-import Mice from  '../imports/mice'
+import Mice from '../imports/mice'
 import Voter from './Voter'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { firestoreConnect } from 'react-redux-firebase'
+
 
 class MiceList extends Component {
+
+  filterCount = index => {
+    const {count} = this.props 
+    const obj = count.find(vote => vote.id === index.toString())
+    return obj && obj.vote ? obj.vote : '0'
+
+  }
+
   render() {
-    const rows = Mice.map((mouseDetail, i) => {
-      return (
-        <tr className="text-primary" key={i}>
-          <td><Voter id={i}/></td>
-          <td>{mouseDetail.Brand}</td>
-          <td>{mouseDetail.Model}</td>
-          <td>{mouseDetail.Sensor}</td>
-          <td>{mouseDetail["Switch Type"]}</td>
-          <td>{mouseDetail.Weight}</td>
-          <td>
-            {mouseDetail.Length}/{mouseDetail.Width}/{mouseDetail.Height}
-          </td>
-          <td>{mouseDetail["Form Factor"]}</td>
-        </tr>
-      );
-    });
+    const {count} = this.props 
+    const obj = count.find(vote => vote.id === '19')
+    console.log(obj && obj.vote ? obj.vote : "This sucks")
+    const columns = [
+      {
+        Header: "Brand",
+        accessor: "Brand"
+      },
+      {
+        Header: "Model",
+        accessor: "Model"
+      },
+      {
+        Header: "Sensor",
+        accessor: "Sensor"
+      },
+      {
+        Header: "Switch Type",
+        accessor: "Switch Type",
+        filterable: false
+      },
+      {
+        Header: "Weight",
+        accessor: "Weight",
+        filterable: false
+      },
+      {
+        Header: "Form Factor",
+        accessor: "Form Factor",
+        filterable: false
+      },
+      {
+        Header: "Dimensions",
+        columns: [
+          {
+            Header: "Length",
+            accessor: "Length",
+            filterable: false
+          },
+          {
+            Header: "Width",
+            accessor: "Width",
+            filterable: false
+          },
+          {
+            Header: "Height",
+            accessor: "Height",
+            filterable: false
+          }
+        ]
+      },
+      {
+        Header: "Votes",
+        accessor: "Voter",
+        filterable: false,
+        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)}/>
+      },
+    ]
     return (
-      <div className="container table-responsive">
-        <h2 className="text-primary">Mouse Table</h2>
-        <table className="table table-bordered table-secondary">
-          <thead className="text-primary table-">
-            <tr>
-              <th>Vote</th>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Sensor</th>
-              <th>Switch Type</th>
-              <th>Weight</th>
-              <th>Len/Wid/Hei</th>
-              <th>Form Factor</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </table>
-        <br />
-      </div>
+      <ReactTable
+        data={Mice}
+        columns={columns}
+        filterable
+        defaultFilterMethod={(filter, row) =>
+          String(row[filter.id]) === filter.value}
+      >
+      </ReactTable>
     );
   }
 }
 
-export default MiceList
+const mapStateToProps = (state) => ({
+  count: state.firestore.ordered.count ? state.firestore.ordered.count : []
+})
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect([{ collection: 'count' }])
+)(MiceList)
