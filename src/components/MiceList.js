@@ -13,18 +13,15 @@ class MiceList extends Component {
 
   filterCount = index => {
     const {count} = this.props 
-    const obj = count.find(vote => vote.id === index.toString())
+    const obj = count.find(doc => doc.id === index.toString())
     return obj && obj.vote ? obj.vote : '0'
 
   }
 
   render() {
-    const {count} = this.props 
-    const obj = count.find(vote => vote.id === '19')
-    console.log(obj && obj.vote ? obj.vote : "This sucks")
     const columns = [
       {
-        Header: "Brand",
+        Header: "Brand",  
         accessor: "Brand"
       },
       {
@@ -90,9 +87,10 @@ class MiceList extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+  return {
   count: state.firestore.ordered.count ? state.firestore.ordered.count : []
-})
+}}
 
 export default compose(
   connect(mapStateToProps),

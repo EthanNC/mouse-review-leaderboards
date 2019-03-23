@@ -1,6 +1,7 @@
 export const upVote = (payload) => {
     return async (dispatch, getState, {getFirestore}) => {
         const firestore = getFirestore()
+        const authorId = getState().firebase.auth.uid
         let numberofVotes = 0
         try {
             const doc = await firestore.collection('count').doc(payload.toString())
@@ -13,26 +14,24 @@ export const upVote = (payload) => {
             await firestore.collection('count').doc(payload.toString()).set({
                 vote: numberofVotes + 1
             })
+            await firestore.set(`count/${payload}/voterState/${authorId}`, {up:true, down:false})
         }
         catch(err)
         {
             console.log(err)
         }
     }
-    // return{
-    //     type: UP_VOTE,
-    //     payload
-    // }
 }
 
 export const downVote = (payload) =>{
     return async (dispatch, getState, {getFirestore}) => {
         const firestore = getFirestore()
+        const authorId = getState().firebase.auth.uid
         let numberofVotes = 0
         try {
             const doc = await firestore.collection('count').doc(payload.toString())
             await doc.get().then(function (d) {
-                if(Number.isInteger(d.data().vote)){
+                if(d.exists){
                     numberofVotes = d.data().vote 
                     console.log(numberofVotes)
                 }
@@ -42,6 +41,7 @@ export const downVote = (payload) =>{
                 vote: numberofVotes - 1
     
             })
+            await firestore.set(`count/${payload}/voterState/${authorId}`, {up:false, down:true})
         }
         catch(err)
         {
