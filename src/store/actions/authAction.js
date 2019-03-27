@@ -11,6 +11,7 @@ export const socialLogin = () => {
                     id:user.user.uid
                 })
             }
+            window.location.reload()
         }catch(error){
             console.log(error)
         }

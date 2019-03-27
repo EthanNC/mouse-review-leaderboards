@@ -79,8 +79,12 @@ class MiceList extends Component {
         data={Mice}
         columns={columns}
         filterable
-        defaultFilterMethod={(filter, row) =>
-          String(row[filter.id]) === filter.value}
+        defaultFilterMethod={(filter, row, column) => {
+          const id = filter.pivotId || filter.id;
+          return row[id] !== undefined
+              ? String(row[id]).includes(filter.value)
+              : true;
+      }}
       >
       </ReactTable>
     );

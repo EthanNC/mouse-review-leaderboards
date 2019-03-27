@@ -12,55 +12,16 @@ class Voter extends Component {
         const obj = voterState ? voterState.find(doc => doc.id === auth.uid) : null
         this.state = {
             disableUpVote: obj ? obj.up : null,
-            disableDownVote: obj ? obj.down : null,
-            test: 'nuetral'
         }
     }
-
-    // componentDidMount(){
-    //     const {auth, voterState} = this.props
-    //     const obj = voterState ? voterState.find(doc => doc.id === auth.uid) : null
-    //     if(obj){
-    //         this.setState({
-    //             disableUpVote: obj.up,
-    //             disableDownVote: obj.down
-    //         })
-    //     }
-
-    // }
-
-    componentDidUpdate(prevProps, prevState) {
-        if(this.state.disableDownVote !== prevState.disableDownVote){
-            this.render()
-        }
-      }
-
+    
     handleUpVote = () => {
-        const { upVote, id } = this.props
+        const { upVote, downVote, id } = this.props
         if (this.state.disableUpVote) {
-            this.handleDownVote()
-            // this.setState({
-            //     disableUpVote: false,
-
-            // })
+            downVote(id)
         }
         else {
             upVote(id)
-        }
-    }
-
-
-    handleDownVote = () => {
-        const { downVote, id } = this.props
-        if (this.state.disableDownVote) {
-            this.handleUpVote()
-            // this.setState({
-            //     disableDownVote: false
-                
-            // })
-        }
-        else {
-            downVote(id)
         }
     }
 
@@ -68,11 +29,10 @@ class Voter extends Component {
         const { auth, vote } = this.props
         return (
             <div>
-                <Button icon positive={this.state.disableUpVote} disabled={!auth.uid} onClick={() => this.handleUpVote()}> <Icon name="arrow alternate circle up" /></Button>
+                <Button icon positive={this.state.disableUpVote} disabled={!auth.uid || this.state.disableUpVote} onClick={() => this.handleUpVote()}> <Icon name="arrow alternate circle up" /> Vote </Button>
                 <Label as='a' basic>
                     {vote}
                 </Label>
-                <Button icon negative={this.state.disableDownVote} disabled={!auth.uid} onClick={() => this.handleDownVote()}><Icon name="arrow alternate circle down" /></Button>
             </div>
         )
     }

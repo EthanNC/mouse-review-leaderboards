@@ -7,8 +7,7 @@ export const upVote = (payload) => {
             const doc = await firestore.collection('count').doc(payload.toString())
             await doc.get().then(function (d) {
                 if(d.exists){
-                    numberofVotes = d.data().vote
-                    console.log(numberofVotes) 
+                    numberofVotes = d.data().vote 
                 }
             })
             await firestore.collection('count').doc(payload.toString()).set({
@@ -33,7 +32,6 @@ export const downVote = (payload) =>{
             await doc.get().then(function (d) {
                 if(d.exists){
                     numberofVotes = d.data().vote 
-                    console.log(numberofVotes)
                 }
             })
            
