@@ -7,12 +7,13 @@ import 'react-table/react-table.css'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
+import { Link } from 'react-router-dom'
 
 
 class MiceList extends Component {
 
   filterCount = index => {
-    const {count} = this.props 
+    const { count } = this.props
     const obj = count.find(doc => doc.id === index.toString())
     return obj && obj.vote ? obj.vote : '0'
 
@@ -21,12 +22,15 @@ class MiceList extends Component {
   render() {
     const columns = [
       {
-        Header: "Brand",  
-        accessor: "Brand"
+        Header: "Brand",
+        accessor: "Brand",
+        Cell:  ({ row }) => <Link to={{pathname:`/mice/${row._index}`, state:{fromRow:row}}} key={row.index}>{row.Brand}</Link>
+    
       },
       {
         Header: "Model",
-        accessor: "Model"
+        accessor: "Model",
+        // Cell:  ({ row }) => <Link to={'/mice/' + row.Model} key={row.index}>{row.Model}</Link>
       },
       {
         Header: "Sensor",
@@ -71,7 +75,7 @@ class MiceList extends Component {
         Header: "Votes",
         accessor: "Voter",
         filterable: false,
-        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)}/>
+        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)} />
       },
     ]
     return (
@@ -82,9 +86,9 @@ class MiceList extends Component {
         defaultFilterMethod={(filter, row, column) => {
           const id = filter.pivotId || filter.id;
           return row[id] !== undefined
-              ? String(row[id]).includes(filter.value)
-              : true;
-      }}
+            ? String(row[id]).includes(filter.value)
+            : true;
+        }}
       >
       </ReactTable>
     );
@@ -93,8 +97,9 @@ class MiceList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-  count: state.firestore.ordered.count ? state.firestore.ordered.count : []
-}}
+    count: state.firestore.ordered.count ? state.firestore.ordered.count : []
+  }
+}
 
 export default compose(
   connect(mapStateToProps),
