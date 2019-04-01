@@ -22,9 +22,27 @@ class MiceList extends Component {
   render() {
     const columns = [
       {
+        Header:"ID",
+        accessor: "Id",
+        maxWidth:30,
+        show: false,
+        filterable: false,
+        sortMethod: (a,b) => {
+          a = (a === null || a === undefined || a === '') ? -Infinity : a;
+            b = (b === null || b === undefined || b === '') ? -Infinity : b;
+
+            a = parseInt(a);
+            b = parseInt(b);
+            if (a === b) {
+              return 0;
+            }
+            return this.filterCount(a) > this.filterCount(b) ? 1 : -1;
+        }
+      },
+      {
         Header: "Brand",
         accessor: "Brand",
-        Cell:  ({ row }) => <Link to={{pathname:`/mice/${row._index}`, state:{fromRow:row}}} key={row.index}>{row.Brand}</Link>
+        // Cell:  ({ row }) => <Link to={{pathname:`/mice/${row._index}`, state:{fromRow:row}}} key={row.index}>{row.Brand}</Link>
     
       },
       {
@@ -57,16 +75,19 @@ class MiceList extends Component {
           {
             Header: "Length",
             accessor: "Length",
+            maxWidth:60,
             filterable: false
           },
           {
             Header: "Width",
             accessor: "Width",
+            maxWidth:60,
             filterable: false
           },
           {
             Header: "Height",
             accessor: "Height",
+            maxWidth:60,
             filterable: false
           }
         ]
@@ -75,7 +96,10 @@ class MiceList extends Component {
         Header: "Votes",
         accessor: "Voter",
         filterable: false,
-        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)} />
+        sortable: false,
+        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)} />,
+        sortMethod: null //sort based on vote prop passed above ^
+        
       },
     ]
     return (
@@ -89,6 +113,13 @@ class MiceList extends Component {
             ? String(row[id]).includes(filter.value)
             : true;
         }}
+        defaultSorted={[
+          {
+            id: "Id",
+            desc: true
+          }
+        ]}
+      
       >
       </ReactTable>
     );

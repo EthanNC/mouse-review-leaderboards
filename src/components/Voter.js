@@ -29,7 +29,10 @@ class Voter extends Component {
         const { auth, vote } = this.props
         return (
             <div>
-                <Button icon positive={this.state.disableUpVote} disabled={!auth.uid || this.state.disableUpVote} onClick={() => this.handleUpVote()}> <Icon name="arrow alternate circle up" /> Vote </Button>
+                <Button icon positive={this.state.disableUpVote} disabled={!auth.uid || this.state.disableUpVote} onClick={() => this.handleUpVote()}>
+                    {!this.state.disableUpVote && <Icon name="arrow alternate circle up" />}
+                    {this.state.disableUpVote ? 'Voted' : "Vote"}
+                </Button>
                 <Label as='a' basic>
                     {vote}
                 </Label>
