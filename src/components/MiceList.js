@@ -12,6 +12,17 @@ import { Link } from 'react-router-dom'
 
 class MiceList extends Component {
 
+  addFilterPlaceholder = () => {
+    const filters = document.querySelectorAll("div.rt-th > input");
+      for (let filter of filters) {
+        filter.placeholder = "Search..";
+      }
+    }
+  
+  componentDidMount() {
+    this.addFilterPlaceholder();
+  }
+
   filterCount = index => {
     const { count } = this.props
     const obj = count.find(doc => doc.id === index.toString())
@@ -21,6 +32,15 @@ class MiceList extends Component {
 
   render() {
     const columns = [
+      {
+        Header: "Votes",
+        accessor: "Voter",
+        maxWidth: 140,
+        filterable: false,
+        sortable: false,
+        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)} />,
+        
+      },
       {
         Header:"ID",
         accessor: "Id",
@@ -52,21 +72,26 @@ class MiceList extends Component {
       },
       {
         Header: "Sensor",
-        accessor: "Sensor"
+        accessor: "Sensor",
+        maxWidth:100,
+        filterable: false
       },
       {
-        Header: "Switch Type",
+        Header: "Switches",
         accessor: "Switch Type",
+        maxWidth:80,
+        filterable: false
+      },
+      {
+        Header: "Shape",
+        accessor: "Form Factor",
+        maxWidth:60,
         filterable: false
       },
       {
         Header: "Weight",
         accessor: "Weight",
-        filterable: false
-      },
-      {
-        Header: "Form Factor",
-        accessor: "Form Factor",
+        maxWidth:60,
         filterable: false
       },
       {
@@ -91,15 +116,6 @@ class MiceList extends Component {
             filterable: false
           }
         ]
-      },
-      {
-        Header: "Votes",
-        accessor: "Voter",
-        filterable: false,
-        sortable: false,
-        Cell: row => <Voter id={row.index} vote={this.filterCount(row.index)} />,
-        sortMethod: null //sort based on vote prop passed above ^
-        
       },
     ]
     return (

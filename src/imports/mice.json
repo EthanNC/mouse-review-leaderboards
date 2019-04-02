@@ -2323,5 +2323,20 @@
       "KEY": "",
       "Code": "",
       "Id": "154"
-  }
+  },
+  {
+    "Brand": "Finalmouse",
+    "Model": "Air 58 Ninja",
+    "Sensor": "PMW 3360",
+    "Switch Type": "Omron",
+    "Weight": "61g",
+    "Length": "12.8cm",
+    "Width": "6.0cm",
+    "Height": "4.0cm",
+    "Form Factor": "Ambi",
+    "": "",
+    "KEY": "",
+    "Code": "",
+    "Id": "155"
+}
 ]

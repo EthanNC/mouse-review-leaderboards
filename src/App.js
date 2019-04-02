@@ -33,14 +33,15 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          {!auth.uid && <Button onClick={this.props.socialLogin} color="google plus" content="Login with Google to Vote" icon="google plus" />}
-          {auth.uid && <Button onClick={this.props.signOut} color="google plus" content="Logout" />}
-          <Header as="h1" content="Mouse Review Leaderboards" textAlign="center"/>
           <Container>
+            {!auth.uid && <Button onClick={this.props.socialLogin} color="google plus" content="Login with Google to Vote" icon="google plus" style={{ marginTop: '0.5em' }} />}
+            {auth.uid && <Button onClick={this.props.signOut} color="google plus" content="Logout" style={{ marginTop: '0.5em' }}/>}
+            <Header as="h1" textAlign="center"> <u>/r/MouseReview Leaderboards</u> </Header>
             <Switch>
               <Route exact path='/' component={MiceList}/>
               <Route path='/mice/:index' component={MiceDetails}/>
             </Switch>
+            <Header size='tiny' textAlign="right">  <a href="https://www.reddit.com/r/MouseReview/comments/9bwqpp/i_created_a_spreadsheet_with_107_mice_and_their/">Thanks to u/LordOfTheMaggots for the data</a> </Header>
           </Container>
         </div>
       </BrowserRouter>
